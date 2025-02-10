@@ -4,7 +4,7 @@ import { verify } from 'jsonwebtoken';
 interface TokenPayload {
     userId: number;
 }
-
+ 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
 
@@ -20,7 +20,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         req.body.userId = decodedToken.userId;
 
         next();
-    } catch (error) {
+    } catch (error) { 
         return res.status(403).json({ message: 'Falha na autenticação: token inválido' });
     }
 };

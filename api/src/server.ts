@@ -4,12 +4,13 @@ import bodyParser from 'body-parser';
 import usuarioRouter from "./routes/usuarioRoute";
 import treinoRouter from "./routes/treinoRouter";
 import exercicioRouter from "./routes/exerciciosRouter";
+import cors from "cors"
 
 const app = Express()
 
+app.use(cors())
 app.use(Express.json());
 app.use(bodyParser.json());
-
 
 app.use('/',usuarioRouter)
 app.use('/',treinoRouter)

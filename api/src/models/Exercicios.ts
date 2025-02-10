@@ -7,7 +7,7 @@ interface IExercicio {
     gif: string;
     comoExexutar: string
 }
-
+ 
 @Entity('Exercicio')
 export class Exercicio implements IExercicio {
     
@@ -17,7 +17,7 @@ export class Exercicio implements IExercicio {
     @Column()
     nome: string;
     
-    @Column()
+    @Column({ default: 'sem-imagem.png' }) 
     gif: string;
     
     @Column()
@@ -26,4 +26,5 @@ export class Exercicio implements IExercicio {
     @ManyToOne(() => Treino, treino => treino.exercicios) 
     treino: Treino;
 
-}
+} 
+  

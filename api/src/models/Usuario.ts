@@ -6,7 +6,7 @@ interface IUsuario {
     nome: string;
     email: string;
     senha: string;
-}
+} 
 
 @Entity('Usuario')
 export class Usuario implements IUsuario {
@@ -23,7 +23,7 @@ export class Usuario implements IUsuario {
     @Column()
     senha: string;
 
-    @OneToMany(() => Treino, treino => treino.usuario,{cascade:true}) 
+    @OneToMany(() => Treino, treino => treino.usuario,{cascade: true}) 
     treinos: Treino[];
 
 }

@@ -97,7 +97,22 @@ class TreinoService {
             throw new Error('Erro ao adicionar os exercícios ao treino!' + error);
         }
     }
-    
+    public async listarExerciciosPorNomeDoTreino(nomeDoTreino: string): Promise<Exercicio[] | []> {
+        try {
+            const treino = await this.treinoRepository.findOne({
+                where: { nome: nomeDoTreino },
+                relations: ['exercicios']
+            });
+ 
+            if (!treino) {
+                return [];
+            }
+
+            return treino.exercicios;
+        } catch (error) {
+            throw new Error('Erro ao listar os exercícios pelo nome do treino!' + error);
+        }
+    }
 }
 
 export default new TreinoService();

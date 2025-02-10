@@ -8,7 +8,7 @@ const exercicioRouter = Router();
 exercicioRouter.post('/salvar-exercicio',authMiddleware, async (req: Request, res: Response) => {
     try {
         const { nome,gif,comoExexutar} = req.body;
-        const novoExercicio = await ExerciciosService.salvarExercicio(nome,gif,comoExexutar, 4);
+        const novoExercicio = await ExerciciosService.salvarExercicio(nome,gif,comoExexutar,req.body.treino);
         return res.status(201).json(novoExercicio);
     } catch (error) {
         console.log(error)
@@ -58,5 +58,5 @@ exercicioRouter.delete('/deletar-exercicio/:id',authMiddleware, async (req: Requ
         return res.status(500).json({ error: 'Erro ao deletar o exercício.' });
     }
 });
-
+ 
 export default exercicioRouter;

@@ -59,6 +59,7 @@ class ExercicioService {
             throw new Error('Erro ao deletar o exercício!' + error);
         }
     }
+   
 }
 
 export default new ExercicioService();

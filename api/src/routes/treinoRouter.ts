@@ -4,7 +4,7 @@ import { authMiddleware } from '../config/authMiddleware';
 
 const treinoRouter = Router();
 
-treinoRouter.post('/salvar-treino',authMiddleware, async (req: Request, res: Response) => {
+treinoRouter.post('/salvar-treino', async (req: Request, res: Response) => {
     try {
         const { nome } = req.body;
         const novoTreino = await TreinoService.salvarTreino( nome, req.body.userId);
@@ -59,5 +59,17 @@ treinoRouter.delete('/deletar-treino/:id',authMiddleware, async (req: Request, r
     }
 });
 
+treinoRouter.get('/exercicios-por-treino/:nomeDoTreino', async (req: Request, res: Response) => {
+    try {
+        const { nomeDoTreino } = req.params;
+        const exercicios = await TreinoService.listarExerciciosPorNomeDoTreino(nomeDoTreino);
+        if (!exercicios) {
+            return res.status(404).json({ message: 'Treino não encontrado.' });
+        }
+        return res.status(200).json(exercicios);
+    } catch (error) {
+        return res.status(500).json({ message: error });
+    }
+});
 
 export default treinoRouter;
