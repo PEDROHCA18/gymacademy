@@ -2,13 +2,24 @@ import { Router, Request, Response } from 'express';
 import ExerciciosService from '../services/ExerciciosService';
 import { authMiddleware } from '../config/authMiddleware';
 import TreinoService from '../services/TreinoService';
+import CloudinaryService from '../services/CloudinaryService'
+import upload from "../config/upload"
+import path from 'path';
 
 const exercicioRouter = Router();
 
-exercicioRouter.post('/salvar-exercicio',authMiddleware, async (req: Request, res: Response) => {
+exercicioRouter.post('/salvar-exercicio',upload.single("image") ,authMiddleware, async (req: Request, res: Response) => {
     try {
-        const { nome,gif,comoExexutar} = req.body;
-        const novoExercicio = await ExerciciosService.salvarExercicio(nome,gif,comoExexutar,req.body.treino);
+        let imageUrl = req.body.image; 
+
+        if (req.file) {
+          const filePath =  path.resolve(req.file.path);
+          const uploadResult = await CloudinaryService.uploadImage(filePath);
+          imageUrl = uploadResult; 
+        }
+
+        const { nome,comoExexutar} = req.body;
+        const novoExercicio = await ExerciciosService.salvarExercicio(nome,imageUrl,comoExexutar,req.body.treino);
         return res.status(201).json(novoExercicio);
     } catch (error) {
         console.log(error)
@@ -44,7 +55,6 @@ exercicioRouter.put('/alterar-exercicio/:id', authMiddleware, async (req: Reques
         return res.status(500).json({ error: 'Erro ao alterar o exercício.' });
     }
 });
-
 
 exercicioRouter.delete('/deletar-exercicio/:id',authMiddleware, async (req: Request, res: Response) => {
     try {

@@ -1,16 +1,21 @@
 import { Exercicio } from "../models/Exercicios";
 import { db } from '../config/database';
-
+import { Treino } from "../models/Treino";
 class ExercicioService {
     private exercicioRepository = db.getRepository(Exercicio);
 
     public async salvarExercicio(nome: string, gif:string,comoExexutar:string, treinoId: number): Promise<Exercicio | null> {
         try {
+            const treino = await db.getRepository(Treino).findOne({ where: { id: treinoId } });
+            
+            if (!treino) {
+                throw new Error(`Treino com ID ${treinoId} não encontrado!`);
+            }
             const novoExercicio = this.exercicioRepository.create({
                 nome,
                 gif,
                 comoExexutar,
-                treino: { id: treinoId },
+                treino,
             });
 
             await this.exercicioRepository.save(novoExercicio);
