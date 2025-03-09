@@ -36,22 +36,27 @@ exercicioRouter.get('/exercicios', async (req: Request, res: Response) => {
     }
 });
 
-exercicioRouter.put('/alterar-exercicio/:id', authMiddleware, async (req: Request, res: Response) => {
+exercicioRouter.put('/alterar-exercicio/:id', upload.single('image'), authMiddleware, async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { nome, gif, comoExexutar } = req.body;
+        const { nome, comoExexutar } = req.body;
+        let imageUrl = req.body.image;
 
+        if (req.file) {
+            const filePath = path.resolve(req.file.path);
+            const uploadResult = await CloudinaryService.uploadImage(filePath);
+            imageUrl = uploadResult;
+        }
 
-        const exercicio = await ExerciciosService.alterarExercicio(parseInt(id), nome, gif, comoExexutar);
-        
+        const exercicio = await ExerciciosService.alterarExercicio(parseInt(id), nome, imageUrl, comoExexutar);
+
         if (!exercicio) {
             return res.status(404).json({ error: 'Exercício não encontrado.' });
         }
-        console.log(exercicio.treino?.id)
 
         return res.status(200).json(exercicio);
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).json({ error: 'Erro ao alterar o exercício.' });
     }
 });
