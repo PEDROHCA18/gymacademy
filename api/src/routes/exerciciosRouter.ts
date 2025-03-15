@@ -27,9 +27,9 @@ exercicioRouter.post('/salvar-exercicio',upload.single("image") ,authMiddleware,
     }
 });
  
-exercicioRouter.get('/exercicios', async (req: Request, res: Response) => {
+exercicioRouter.get('/exercicios/:id', async (req: Request, res: Response) => {
     try {
-        const exercicios = await ExerciciosService.listarExercicios()
+        const exercicios = await ExerciciosService.listarExerciciosPorId(Number(req.params.id))
         return res.status(200).json(exercicios);
     } catch (error) {
         return res.status(500).json({ error: 'Erro ao listar os exercícios.' });

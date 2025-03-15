@@ -26,14 +26,16 @@ class ExercicioService {
         }
     }
 
-    public async listarExercicios(): Promise<Exercicio[] | null> {
+    public async listarExerciciosPorId(id: number): Promise<Exercicio | null> {
         try {
-            const exercicios = await this.exercicioRepository.find();
-            return exercicios;
+            const exercicio = await this.exercicioRepository.findOne({ where: { id }, relations: ['treino'] });
+            return exercicio;
         } catch (error) {
-            throw new Error('Erro ao listar os exercícios do treino!' + error);
+            throw new Error('Erro ao buscar o exercício pelo ID! ' + error);
         }
     }
+    
+    
 
     public async alterarExercicio(id: number, nome: string, gif:string,comoExexutar:string): Promise<Exercicio | null> {
         try {
